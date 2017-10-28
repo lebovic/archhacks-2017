@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var Resource = require('../models/Resource');
+var findResourceType = require('../utils/resources').findResourceType;
 
 // @todo: move outta here
 var googleMapsClient = require('@google/maps').createClient({
@@ -111,30 +112,5 @@ router.post('/api/texts', function(req, res, next) {
   		}
 	});
 });
-
-// Seperate out into util, and make more efficient?
-function findResourceType(textMessage) {
-	// @todo: add more resources
-	const allResources = ["food", "water"];
-	const lowerTextMessage = textMessage.toLowerCase();
-	const parsedMessage = {
-		resources: [],
-		text: "",
-	};
-
-	// Find, note, and remove all resources from text
-	for (var i = 0; i < allResources.length; i++) {
-		if (lowerTextMessage.indexOf(allResources[i]) !== -1) {
-			parsedMessage.resources.push(allResources[i]);
-			if (!parsedMessage.text) {
-				parsedMessage.text = lowerTextMessage.replace(allResources[i], "");
-			} else {
-				parsedMessage.text = parsedMessage.text.replace(allResources[i], "");
-			}
-		}
-	}
-
-	return parsedMessage;
-}
 
 module.exports = router;

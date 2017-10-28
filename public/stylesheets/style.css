@@ -1,5 +1,36 @@
 body {
     margin: 0px;
-    background-color: #000000;
+    height: 100vh;
+    width: 100vw;
     overflow: hidden;
+}
+
+#mainScreen {
+	position: absolute;
+	height: 100%;
+	width: 80%;
+	left: 0;
+}
+
+.sideScreen {
+	position: absolute;
+	height: 25%;
+	width: 20%;
+	right: 0;
+}
+
+#sideScreen1 {
+	top: 0;
+}
+
+#sideScreen2 {
+	top: 25%;
+}
+
+#sideScreen3 {
+	top: 50%;
+}
+
+#sideScreen4 {
+	top: 75%;
 }

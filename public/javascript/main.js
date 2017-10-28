@@ -1,22 +1,14 @@
-var camera, controller, scene, renderer, mesh;
+var mainScreen, sideScreen1, sideScreen2, sideScreen3, sideScreen4;
 
 function init() {
-    // Create the scene where we will place everything 
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    mainScreen = new Screen(0, {"div" : document.getElementById("mainScreen")});
+    // sideScreen1 = document.getElementById("sideScreen1");
+    // sideScreen2 = document.getElementById("sideScreen2");
+    // sideScreen3 = document.getElementById("sideScreen3");
+    // sideScreen4 = document.getElementById("sideScreen4");
 
-    // This is us adding the renderer to the actual HTML DOM
-    document.body.appendChild( renderer.domElement );
-
-    scene = new THREE.Scene();
-    // Creates the camera we use to view the scene
-    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-    camera.position.z = 400;
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
-    controls.enableZoom = false;
-
+   
     // Load in a texture by referencing the image location from THIS file
     var texture = new THREE.TextureLoader().load( '../textures/earth.jpg' );
 
@@ -27,32 +19,10 @@ function init() {
     var material = new THREE.MeshBasicMaterial( { map: texture } );
 
     // Combines geometry and material together to form a mesh we can then add to scene
-    mesh = new THREE.Mesh( geometry, material );
-    scene.add( mesh );
-    
-    // This is what we will do when someone resizes the screen
-    window.addEventListener( 'resize', onWindowResize, false );
+    var mesh = new THREE.Mesh( geometry, material );
+    mainScreen.add( mesh );
 
     // Time to start the animation cycle!
-    animate();
+    mainScreen.animate();
 }
 
-function onWindowResize() {
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-}
-
-function animate() {
-
-    requestAnimationFrame( animate );
-
-    mesh.rotation.x += 0.001;
-    mesh.rotation.y += 0.008;
-
-    controls.update();
-
-    renderer.render( scene, camera );
-}

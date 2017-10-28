@@ -60,6 +60,7 @@ router.post('/api/texts', function(req, res, next) {
 	console.log("Incoming text:", req.body.Body, "\nFrom:", req.body.From);
 
 	const textMessage = req.body.Body;
+	const fromNumber = req.body.From;
 	
 	// Extract resources from text
 	console.dir(findResourceType(textMessage));
@@ -70,9 +71,38 @@ router.post('/api/texts', function(req, res, next) {
 	googleMapsClient.geocode({
   		address: semiParsedText.text
 	}, function(err, response) {
-  		if (!err && response.json.results.length) {
-    		console.log(response.json.results);
-    		res.send("<Response><Message>It worked! More details developed soon.</Message></Response>")
+  		if (!err && response.json.results.length === 1) {
+  			const location = response.json.results[0].geometry.location;
+    		console.log(response.json.results[0].geometry.location);
+
+    		var formattedResources = "";
+    		for (var i = 0; i < semiParsedText.resources.length; i++){
+    			if (i === 0) {
+    				formattedResources = semiParsedText.resources[i];
+    			} else {
+    				formattedResources = `${formattedResources} and ${semiParsedText.resources[i]}`;
+    			}
+    		}
+
+    		const formattedResponse = `Added a resource of ${formattedResources} at ${location.lat}, ${location.lng}.`;
+    		const newResource = {
+    			"supplies": semiParsedText.resources,
+    			"contact": fromNumber,
+    			"lat": location.lat,
+    			"lng": location.lng,
+    		};
+
+    		Resource.create(newResource, function(err, doc) {
+		    if (err)
+		      	return next(err);
+
+		  		console.dir(doc);
+		  		res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
+		  	});
+
+    		// res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
+  		} else if (response.json.results.length) {
+  			res.send("<Response><Message>Address ambiguous. Please try again.</Message></Response>")
   		} else {
   			console.log("Couldn't recognize address");
   			res.send("<Response><Message>We couldn't recognize your address.</Message></Response>");

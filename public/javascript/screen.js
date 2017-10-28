@@ -23,16 +23,22 @@ Screen.prototype.initialize = function(id, options){
 	// want ID to match render and animate to graphic
 	this.id = id;
 	this.options = options;
+	this.parentDiv = options.div;
+	this.parentDiv.renderId = id;
 
-	this.camera = new THREE.PerspectiveCamera( 45, this.options.div.clientWidth / this.options.div.clientHeight, 1, 2000 );
-	this.camera.position.z = 300;
+	this.camera = new THREE.PerspectiveCamera( 45, this.parentDiv.clientWidth / this.parentDiv.clientHeight, 1, 2000 );
+	this.camera.position.z = (options.cameraZ || 500);
 	this.renderer =  new THREE.WebGLRenderer();
 	this.renderer.setPixelRatio( window.devicePixelRatio );
-	this.renderer.setSize(this.options.div.clientWidth, this.options.div.clientHeight );
+	this.renderer.setSize(this.parentDiv.clientWidth, this.parentDiv.clientHeight );
 
 	this.scene = new THREE.Scene();
 
-    this.options.div.appendChild( this.renderer.domElement );
+    this.parentDiv.appendChild( this.renderer.domElement );
+
+    if (this.options.expandOff) {
+    	this.parentDiv.getElementsByClassName("expandImg")[0].style.display = "none";
+    }
 
     this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
     this.controls.enableZoom = false;
@@ -45,10 +51,10 @@ Screen.prototype.initialize = function(id, options){
 
 Screen.prototype.onWindowResize = function(){
 
-	this.camera.aspect = this.options.div.clientWidth / this.options.div.clientHeight;
+	this.camera.aspect = this.parentDiv.clientWidth / this.parentDiv.clientHeight;
 	this.camera.updateProjectionMatrix();
 
-    this.renderer.setSize( this.options.div.clientWidth, this.options.div.clientHeight );
+    this.renderer.setSize( this.parentDiv.clientWidth, this.parentDiv.clientHeight );
 };
 
 Screen.prototype.animate = function() {
@@ -65,8 +71,8 @@ Screen.prototype.animate0 = function() {
  //cancelAnimationFrame(this.animationFrame);
 	this.animationFrame = requestAnimationFrame( this.animate0 );
 
-	// this.mesh.rotation.x += 0.001;
-	// this.mesh.rotation.y += 0.008;
+	this.globe.rotation.x += 0.001;
+	this.globe.rotation.y += 0.008;
 
 	this.controls.update();
 

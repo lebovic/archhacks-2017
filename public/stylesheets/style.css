@@ -34,3 +34,19 @@ body {
 #sideScreen4 {
 	top: 75%;
 }
+
+.expandImg {
+	position: absolute;
+	float: left;
+	align-items: left;
+	align-self: left;
+	text-align: left;
+	max-height: 26px;
+	max-width: 26px;
+
+	z-index: 300;
+}
+
+.expandImg:hover{
+	border: : 2px solid blue; !important;
+}

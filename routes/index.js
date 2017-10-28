@@ -3,6 +3,11 @@ var router = express.Router();
 
 var Resource = require('../models/Resource');
 
+// @todo: move outta here
+var googleMapsClient = require('@google/maps').createClient({
+  key: '***REMOVED***'
+});
+
 
 // Use with @testdata
 // const testData = [
@@ -56,16 +61,30 @@ router.post('/api/texts', function(req, res, next) {
 
 	const textMessage = req.body.Body;
 	
+	// Extract resources from text
 	console.dir(findResourceType(textMessage));
+	const semiParsedText = findResourceType(textMessage);
 
-
-	res.send("<Response></Response>")
+	// Attempt to geocode remaining text
+	// @todo: store resource types and send clarifying text about address if address can't be coded
+	googleMapsClient.geocode({
+  		address: semiParsedText.text
+	}, function(err, response) {
+  		if (!err && response.json.results.length) {
+    		console.log(response.json.results);
+    		res.send("<Response><Message>It worked! More details developed soon.</Message></Response>")
+  		} else {
+  			console.log("Couldn't recognize address");
+  			res.send("<Response><Message>We couldn't recognize your address.</Message></Response>");
+  		}
+	});
 });
 
 // Seperate out into util, and make more efficient?
 function findResourceType(textMessage) {
 	// @todo: add more resources
 	const allResources = ["food", "water"];
+	const lowerTextMessage = textMessage.toLowerCase();
 	const parsedMessage = {
 		resources: [],
 		text: "",
@@ -73,10 +92,10 @@ function findResourceType(textMessage) {
 
 	// Find, note, and remove all resources from text
 	for (var i = 0; i < allResources.length; i++) {
-		if (textMessage.indexOf(allResources[i]) !== -1) {
+		if (lowerTextMessage.indexOf(allResources[i]) !== -1) {
 			parsedMessage.resources.push(allResources[i]);
 			if (!parsedMessage.text) {
-				parsedMessage.text = textMessage.replace(allResources[i], "");
+				parsedMessage.text = lowerTextMessage.replace(allResources[i], "");
 			} else {
 				parsedMessage.text = parsedMessage.text.replace(allResources[i], "");
 			}

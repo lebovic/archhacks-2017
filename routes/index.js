@@ -92,15 +92,17 @@ router.post('/api/texts', function(req, res, next) {
     			"lng": location.lng,
     		};
 
-    		Resource.create(newResource, function(err, doc) {
-		    if (err)
-		      	return next(err);
 
-		  		console.dir(doc);
-		  		res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
-		  	});
+    		// Keep resources clean while testing. Uncomment when ready to use
+    		// 	Resource.create(newResource, function(err, doc) {
+		   //  if (err)
+		   //    	return next(err);
 
-    		// res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
+		  	// 	console.dir(doc);
+		  	// 	res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
+		  	// });
+		  	res.send("<Response><Message>Adding resources via text temporarily disabled.</Message></Response>")
+
   		} else if (response.json.results.length) {
   			res.send("<Response><Message>Address ambiguous. Please try again.</Message></Response>")
   		} else {

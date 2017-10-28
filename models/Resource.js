@@ -13,7 +13,7 @@
         lat: Number,
         lng: Number,
         contact: Number,
-    }, { "collection": "sms_resources_test" });
+    }, { "collection": "resources" });
 
     console.dir(ResourceSchema);
 

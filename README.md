@@ -1,4 +1,4 @@
-Welcome to the ArchHacks repo
+Welcome to the ArchHacks repo  ![logo](./public/favicon.ico)
 ==================================================
 
 This sample code helps get you started with a simple Node.js web application

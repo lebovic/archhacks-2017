@@ -1,8 +1,8 @@
-Welcome to the AWS CodeStar sample web application
+Welcome to the ArchHacks repo
 ==================================================
 
 This sample code helps get you started with a simple Node.js web application
-deployed by AWS CodeDeploy to an Amazon EC2 instance.
+deployed by AWS CodeDeploy to an Amazon EC2 instance. Express scaffolding was then added in replacement of the AWS non-deploy code.
 
 What's Here
 -----------
@@ -10,7 +10,6 @@ What's Here
 This sample includes:
 
 * README.md - this file
-* app.js - this file contains the code for your application
 * appspec.yml - this file is used by AWS CodeDeploy when deploying the web
   application to EC2
 * package.json - this file contains various metadata relevant to your Node.js
@@ -18,7 +17,7 @@ This sample includes:
 * public/ - this directory contains static web assets used by your application
 * scripts/ - this directory contains scripts used by AWS CodeDeploy when
   installing and deploying your application on the Amazon EC2 instance
-
+* everything else is express scaffolding – update this as the organization of the project evolves
 
 Getting Started
 ---------------
@@ -40,23 +39,15 @@ AWS CodeStar user guide.
         $ npm install
 
 2. Start the development server:
+On macOS/linux:
+        $ DEBUG=archhacks:* npm start
+On Windows:
+	$ DEBUG=archhacks:* & npm start
 
-        $ node app.js
+3. Open http://localhost:3000/ in a web browser to view your application.
 
-3. Open http://127.0.0.1:3000/ in a web browser to view your application.
-
-What Do I Do Next?
+AWS references:
 ------------------
-
-Once you have a virtual environment running, you can start making changes to
-the sample Node.js web application. We suggest making a small change to
-/public/index.html first, so you can see how changes pushed to your project's
-repository are automatically picked up by your project pipeline and deployed to
-the Amazon EC2 instance. (You can watch the progress on your project dashboard.)
-Once you've seen how that works, start developing your own code, and have fun!
-
-Learn more about AWS CodeStar by reading the user guide.  Ask questions or make
-suggestions on our forum.
 
 User Guide: http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
 

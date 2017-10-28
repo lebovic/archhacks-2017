@@ -59,3 +59,6 @@ typings/
 
 # mongodb data folder
 data/*
+
+# IDE info to ourselves
+.idea/*

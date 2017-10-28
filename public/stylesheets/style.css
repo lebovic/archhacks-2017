@@ -1,8 +1,52 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin: 0px;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
 }
 
-a {
-  color: #00B7FF;
+#mainScreen {
+	position: absolute;
+	height: 100%;
+	width: 80%;
+	left: 0;
+}
+
+.sideScreen {
+	position: absolute;
+	height: 25%;
+	width: 20%;
+	right: 0;
+}
+
+#sideScreen1 {
+	top: 0;
+}
+
+#sideScreen2 {
+	top: 25%;
+}
+
+#sideScreen3 {
+	top: 50%;
+}
+
+#sideScreen4 {
+	top: 75%;
+}
+
+.expandImg {
+	position: absolute;
+	float: left;
+	align-items: left;
+	align-self: left;
+	text-align: left;
+	max-height: 26px;
+	max-width: 26px;
+
+	z-index: 300;
+}
+
+.expandImg:hover{
+	border: : 2px solid blue; !important;
 }

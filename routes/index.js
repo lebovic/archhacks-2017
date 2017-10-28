@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
 
@@ -5,6 +6,7 @@ var Resource = require('../models/Resource');
 var Tweet = require('../models/Tweet');
 var findResourceType = require('../utils/resources').findResourceType;
 var getTweets = require('../utils/analyze-tweets').getTweets;
+var CONSTANTS = require('../utils/constants');
 
 // @todo: move outta here
 var googleMapsClient = require('@google/maps').createClient({
@@ -34,8 +36,8 @@ router.get('/api/resources', (req, res, next) => {
   Resource.find((err, doc) => {
     if (err)
       return next(err);
-  	console.dir(doc);
-    res.json(doc);
+
+    res.json(doc.map((resource) => _.pick(resource, CONSTANTS.RESOURCE.RETURNABLE_FIELDS)));
   });
 });
 
@@ -58,16 +60,27 @@ router.post('/api/resources', function(req, res, next) {
   });
 });
 
-// Get tweets with negative sentiment
+// Return tweets in geographic area with sentiment
 router.get('/api/tweets', async function(req, res, next) {
-	await getTweets(10);
+	Tweet.find((err, doc) => {
+	    if (err)
+	      return next(err);
+
+    	res.json(doc.map((tweet) => _.pick(tweet, CONSTANTS.TWEET.RETURNABLE_FIELDS)));
+  	});
+})
+
+// Fetch tweets within geographic area with sentiment
+router.post('/api/tweets', async function(req, res, next) {
+	console.log('Numtweets = ', req.body.numTweets)
+	await getTweets(req.body.numTweets);
 
 	Tweet.find((err, doc) => {
-    if (err)
-      return next(err);
-  	console.dir(doc);
-    res.json(doc);
-  });
+	    if (err)
+	      return next(err);
+
+    	res.json(doc);
+  	});
 })
 
 // Parse incoming texts (incomplete), and respond with blank TwiML to not respond
@@ -109,14 +122,14 @@ router.post('/api/texts', function(req, res, next) {
 
 
     		// Keep resources clean while testing. Uncomment when ready to use
-    		// 	Resource.create(newResource, function(err, doc) {
-		   //  if (err)
-		   //    	return next(err);
+    		Resource.create(newResource, function(err, doc) {
+		    if (err)
+		      	return next(err);
 
-		  	// 	console.dir(doc);
-		  	// 	res.send("<Response><Message>It worked! " + formattedResponse + "</Message></Response>")
-		  	// });
-		  	res.send("<Response><Message>Adding resources via text temporarily disabled.</Message></Response>")
+		  		console.dir(doc);
+		  		res.send("<Response><Message>Received! " + formattedResponse + "</Message></Response>")
+		  	});
+		  	// res.send("<Response><Message>Adding resources via text temporarily disabled.</Message></Response>")
 
   		} else if (response.json.results.length) {
   			res.send("<Response><Message>Address ambiguous. Please try again.</Message></Response>")

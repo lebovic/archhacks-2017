@@ -9,13 +9,13 @@ What's Here
 
 This sample includes:
 
-* README.md - this file
-* appspec.yml - this file is used by AWS CodeDeploy when deploying the web
+* **README.md** - this file
+* **appspec.yml** - this file is used by AWS CodeDeploy when deploying the web
   application to EC2
-* package.json - this file contains various metadata relevant to your Node.js
+* **package.json** - this file contains various metadata relevant to your Node.js
   application such as dependencies
-* public/ - this directory contains static web assets used by your application
-* scripts/ - this directory contains scripts used by AWS CodeDeploy when
+* **public/** - this directory contains static web assets used by your application
+* **scripts/** - this directory contains scripts used by AWS CodeDeploy when
   installing and deploying your application on the Amazon EC2 instance
 * everything else is express scaffolding – update this as the organization of the project evolves
 
@@ -38,17 +38,18 @@ AWS CodeStar user guide.
 
         $ npm install
 
-2. Start the development server:
-On macOS/linux:
-        $ DEBUG=archhacks:* npm start
-On Windows:
-	$ DEBUG=archhacks:* & npm start
+3. Start the development server:
 
-3. Open http://localhost:3000/ in a web browser to view your application.
+- On macOS/linux:
+	- $ `DEBUG=archhacks:* npm start`
+- On Windows:
+	- $ `DEBUG=archhacks:* & npm start`
+
+4. Open [http://localhost:3000/](http://localhost:3000/) in a web browser to view your application.
 
 AWS references:
 ------------------
 
-User Guide: http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html
+[User Guide](http://docs.aws.amazon.com/codestar/latest/userguide/welcome.html)
 
-Forum: https://forums.aws.amazon.com/forum.jspa?forumID=248
+[Forum](https://forums.aws.amazon.com/forum.jspa?forumID=248)

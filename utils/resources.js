@@ -1,7 +1,7 @@
 // @todo: make more efficient
 function findResourceType(textMessage) {
 	// @todo: add more resources
-	const allResources = ["food", "water"];
+	const allResources = ["food", "water", "medical", "rescue"];
 	const lowerTextMessage = textMessage.toLowerCase();
 	const parsedMessage = {
 		resources: [],

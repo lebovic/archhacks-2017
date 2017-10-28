@@ -15,12 +15,13 @@ var twitter = new Twit({
  	timeout_ms: 60*1000,
 })
 
+// Lat, long, radius for twitter search region
+const searchRegion = ['29.725407','-95.346017','20mi']
+
 var relevantTweets = [];
 
 function relevantTweet(tweet) {
-	// todo: add sentiment analysis
-	if (tweet.coordinates && !tweet.possibly_sensitive && sentiment.negative(tweet.text)) {
-		// console.log(tweet.text)
+	if (tweet.coordinates && !tweet.possibly_sensitive) {
 		return true;
 	}
 
@@ -38,20 +39,16 @@ async function getTweets(count) {
 			include_entities: false,
 			max_id: minId,
 			count: 100,
-			geocode: ['18.226679','-66.488178','44mi']}, function(err, data, response) {
+			geocode: searchRegion}, function(err, data, response) {
 		  const statuses = data.statuses;
-		  // console.log("This many tweets", statuses.length);
-		  // console.log(statuses);
 		  statuses.map((tweet) => relevantTweet(tweet) ? relevantTweets.push(tweet) || (noMoreTweets++) : null);
-		  // console.log('Old min id', minId);
 
 		  // Find minId to keep querying for older tweets (max. 100 tweets per request)
 		  minId = !minId
 		  	? statuses.reduce((acc, tweet) => tweet.id < acc ? tweet.id : acc, 9924317044341989400)
 		  	: statuses.reduce((acc, tweet) => tweet.id < acc ? tweet.id : acc, minId)
-		  // console.log('New min id', minId);
 		})
-		console.log('Still going with < 5 r', noMoreTweets, 'at', relevantTweets.length)
+		console.log('Still going with < 5 r', noMoreTweets, 'at', relevantTweets.length, "minId", minId);
 	}
 	console.log("Relevant:", relevantTweets.length);
 
@@ -68,14 +65,12 @@ function saveTweets(relevantTweets) {
 			region: relevantTweets[i].place.name,
 			sentiment: sentiment.value(relevantTweets[i].text),
 		};
-		console.log(newTweet);
 
 		Tweet.create(newTweet, function(err, doc) {
     		if (err)
       			return next(err);
 
 			console.log("New tweet added");
-   
   		});
 	}
 }

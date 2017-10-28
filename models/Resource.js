@@ -15,8 +15,6 @@
         contact: Number,
     }, { "collection": "resources" });
 
-    console.dir(ResourceSchema);
-
 module.exports = mongoose.model('Resource', ResourceSchema);
 
 })();

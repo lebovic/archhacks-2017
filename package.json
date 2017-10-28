@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@google/maps": "^0.4.5",
+    "bluebird": "^3.5.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -14,6 +15,8 @@
     "mongoose": "^4.12.4",
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
-    "serve-favicon": "~2.4.5"
+    "sentiment": "^4.1.0",
+    "serve-favicon": "~2.4.5",
+    "twit": "^2.2.9"
   }
 }

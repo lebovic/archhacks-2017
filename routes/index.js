@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 var Resource = require('../models/Resource');
+var Tweet = require('../models/Tweet');
 var findResourceType = require('../utils/resources').findResourceType;
+var getTweets = require('../utils/analyze-tweets').getTweets;
 
 // @todo: move outta here
 var googleMapsClient = require('@google/maps').createClient({
@@ -55,6 +57,18 @@ router.post('/api/resources', function(req, res, next) {
     });
   });
 });
+
+// Get tweets with negative sentiment
+router.get('/api/tweets', async function(req, res, next) {
+	await getTweets(10);
+
+	Tweet.find((err, doc) => {
+    if (err)
+      return next(err);
+  	console.dir(doc);
+    res.json(doc);
+  });
+})
 
 // Parse incoming texts (incomplete), and respond with blank TwiML to not respond
 router.post('/api/texts', function(req, res, next) {

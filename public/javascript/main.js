@@ -1,8 +1,8 @@
-var camera, scene, controls, renderer, mesh;
+var camera, controller, scene, renderer, mesh;
 
-document.body.onload = function() {
+function init() {
+    // Create the scene where we will place everything 
 
-    // The renderer will display everything to screen for us
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -10,7 +10,6 @@ document.body.onload = function() {
     // This is us adding the renderer to the actual HTML DOM
     document.body.appendChild( renderer.domElement );
 
-    // Create the scene where we will place everything 
     scene = new THREE.Scene();
     // Creates the camera we use to view the scene
     camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -55,10 +54,5 @@ function animate() {
 
     controls.update();
 
-    render();
-}
-
-
-function render() {
     renderer.render( scene, camera );
 }

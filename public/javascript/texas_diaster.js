@@ -45,7 +45,7 @@ function texas_diaster_init() {
       x = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lng - TEXAS_DIASTER_DATA.ORIGIN.lng) / texas_diaster_normalize_w)));
       y = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lat - TEXAS_DIASTER_DATA.ORIGIN.lat) / texas_diaster_normalize_h)));
 
-      if (x < 0 || y < 0 || x > 128 || y > 128) {
+      if (x < 0 || y < 0 || x > texas_diaster_grid_size || y > texas_diaster_grid_size) {
       	continue;
 			}
 

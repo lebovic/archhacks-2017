@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# mongodb data folder
+data/*
+
+# IDE info to ourselves
+.idea/*

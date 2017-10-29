@@ -1,15 +1,15 @@
 const TEXAS_DIASTER_DATA = {	
-	"MIN_ZOOM"   : 6,
-	"CENTER" : { "lat" : 31.3757594, "lng" : -101.3568667 },
-	"ORIGIN" : { "lat" : 26.2630182, "lng" : -103.8584689 },
-	"CORNER" : { "lat" : 35.6932503, "lng" : -94.0274727 },
+	"MIN_ZOOM"   : 11,
+	"CENTER" : { "lat" : 29.757478, "lng" : -95.3514902 },
+	"ORIGIN" : { "lat" : 29.620715, "lng" : -95.5233427 },
+	"CORNER" : { "lat" : 29.906365, "lng" : -95.1832977 },
 	"SUPPLIES" : ["rescue", "food", "medical", "water"]
 }
 
 var texas_diaster_grid; // actual 2d array
-var texas_diaster_grid_size = 64;
-var texas_diaster_grid_h = 600;
-var texas_diaster_grid_w = 500;
+var texas_diaster_grid_size = 128;
+var texas_diaster_grid_h = 700;
+var texas_diaster_grid_w = 700;
 var texas_diaster_block_w = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
 var texas_diaster_block_h = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
 var texas_diaster_normalize_h = TEXAS_DIASTER_DATA.CORNER.lat - TEXAS_DIASTER_DATA.ORIGIN.lat;
@@ -25,7 +25,6 @@ function texas_diaster_init() {
 	screen0.mapMesh = new THREE.Mesh( geometry, material );
 	screen0.add( screen0.mapMesh );
 
-	// texas_diaster_box_geo  = new THREE.BoxGeometry( 5, 4, 5) ;
 	texas_diaster_box_mat[0]  = new THREE.MeshBasicMaterial( {color: 0x00FF00} ); // rescue  green
 	texas_diaster_box_mat[1]  = new THREE.MeshBasicMaterial( {color: 0xFFA500} ); // food - orange
 	texas_diaster_box_mat[2]  = new THREE.MeshBasicMaterial( {color: 0xFF0000} ); // medical - red

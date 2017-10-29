@@ -26,7 +26,7 @@ Screen.prototype.initialize = function(id, options){
 	this.parentDiv = options.div;
 	this.parentDiv.renderId = id;
 
-	this.camera = new THREE.PerspectiveCamera( 45, this.parentDiv.clientWidth / this.parentDiv.clientHeight, 1, 2000 );
+	this.camera = new THREE.PerspectiveCamera( 55, this.parentDiv.clientWidth / this.parentDiv.clientHeight, 1, 2000 );
 	this.camera.position.z = (options.cameraZ || 500);
 	this.renderer =  new THREE.WebGLRenderer();
 	this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -41,7 +41,7 @@ Screen.prototype.initialize = function(id, options){
     }
 
     this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.enableZoom = false;
+    // this.controls.enableZoom = false;
    
    
     // This is what we will do when someone resizes the screen
@@ -71,8 +71,8 @@ Screen.prototype.animate0 = function() {
  //cancelAnimationFrame(this.animationFrame);
 	this.animationFrame = requestAnimationFrame( this.animate0 );
 
-	this.globe.rotation.x += 0.001;
-	this.globe.rotation.y += 0.008;
+	// this.globe.rotation.x += 0.001;
+	// this.globe.rotation.y += 0.008;
 
 	this.controls.update();
 

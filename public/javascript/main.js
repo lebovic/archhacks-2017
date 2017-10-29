@@ -1,14 +1,9 @@
-var mainScreen, sideScreen1, sideScreen2, sideScreen3, sideScreen4;
-var startX = 18.234159;
-var startY = -66.4369742;
-const MIN_ZOOM = 9;
-const PIC_SIZE = 512;
-
 function init() {
 
     screen0 = new Screen(0, {
         "div" : document.getElementById("mainScreen"), 
-        "expandOff" : true
+        "expandOff" : true,
+        "cameraZ" : 600 
     });
     screen1 = new Screen(1, {
         "div" : document.getElementById("sideScreen1"),
@@ -24,12 +19,9 @@ function init() {
         "div" : document.getElementById("sideScreen4")
     });
    
-    var textureStart = new THREE.TextureLoader().load( '../textures/start_rico.png' );
-    var geometryStart = new THREE.SphereGeometry( 200, 128, 128 );
-    var materialStart = new THREE.MeshBasicMaterial( { map: textureStart } );
-    screen0.globe = new THREE.Mesh( geometryStart, materialStart );
-    screen0.add( screen0.globe );
 
+    texas_diaster_init();
+    
     var textureEarth = new THREE.TextureLoader().load( '../textures/earth.jpg' );
     var geometryEarth = new THREE.SphereGeometry( 200, 128, 128 );
     var materialEarth = new THREE.MeshBasicMaterial( { map: textureEarth } );
@@ -58,6 +50,7 @@ function init() {
 
 
 
+    // Start all animates at same time
     screen0.animate();
     screen1.animate();
     screen2.animate();

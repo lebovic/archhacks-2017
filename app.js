@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var server = require('http').createServer(app); //creates an HTTP server instance
 var io = require('socket.io')(server);
+global.io = io;
 
 // var server = require('http').createServer(app);
 // var io = require('socket.io').listen(server);
@@ -16,7 +17,7 @@ var io = require('socket.io')(server);
 var dgram = require('dgram');
 var ip = require('ip');
 
-var index = require('./routes/index');
+var index = require('./routes/index')(app.io);
 var users = require('./routes/users');
 // var api = require('./routes/api');
 var config = require('./config/config');

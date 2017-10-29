@@ -73,15 +73,10 @@ function addSentiment(lng, lat, sentiment) {
 	var spotLight = new THREE.SpotLight( sColor, 3.4, 700 , .8, 0.25, 1);
 	}
 
-	
 	spotLight.position.set( x, y, 300 );
 
-
 	spotLight.target.position.set( x, y, -20);
-	//  spotLight.castShadow = true;
-	 console.log("x y", x, y);
-	// spotLight.shadow.mapSize.width = 16;
-	// spotLight.shadow.mapSize.height = 16;
+
 	screen1.add( spotLight.target );
 	screen1.add( spotLight );
 }

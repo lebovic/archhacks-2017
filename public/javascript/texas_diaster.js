@@ -10,8 +10,8 @@ var texas_diaster_grid; // actual 2d array
 var texas_diaster_grid_size = 128;
 var texas_diaster_grid_h = 700;
 var texas_diaster_grid_w = 700;
-var texas_diaster_block_w = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
-var texas_diaster_block_h = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
+var texas_diaster_block_w = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) + 1;
+var texas_diaster_block_h = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) + 1;
 var texas_diaster_normalize_h = TEXAS_DIASTER_DATA.CORNER.lat - TEXAS_DIASTER_DATA.ORIGIN.lat;
 var texas_diaster_normalize_w = TEXAS_DIASTER_DATA.CORNER.lng - TEXAS_DIASTER_DATA.ORIGIN.lng;
 var texas_diaster_box_geo;
@@ -45,18 +45,25 @@ function texas_diaster_init() {
       x = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lng - TEXAS_DIASTER_DATA.ORIGIN.lng) / texas_diaster_normalize_w)));
       y = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lat - TEXAS_DIASTER_DATA.ORIGIN.lat) / texas_diaster_normalize_h)));
 
+      if (x < 0 || y < 0 || x > 128 || y > 128) {
+      	continue;
+			}
+
       if (data[i].supplies.indexOf("rescue") >= 0) {
-        texas_diaster_grid[x][y].rescue++;
+        texas_diaster_grid[x][y] && texas_diaster_grid[x][y].rescue++;
       }
       if (data[i].supplies.indexOf("food") >= 0) {
-        texas_diaster_grid[x][y].food++;
+      	console.log();
+        texas_diaster_grid[x][y] && texas_diaster_grid[x][y].food++;
       }
       if (data[i].supplies.indexOf("medical") >= 0) {
-        texas_diaster_grid[x][y].medical++;
+        texas_diaster_grid[x][y] && texas_diaster_grid[x][y].medical++;
       }
       if (data[i].supplies.indexOf("water") >= 0) {
-        texas_diaster_grid[x][y].water++;
+        texas_diaster_grid[x][y] && texas_diaster_grid[x][y].water++;
       }
+
+      // if (data[i].lat == 29.620715) debugger;
     }
 
     for (i = 0; i < texas_diaster_grid_size; i++) {
@@ -81,10 +88,11 @@ function texas_diaster_init() {
 function addBlock(lat, lng, supplies, contact) {
 	var group = new THREE.Group();
 	var heightOffset = 0;
-
+	var block;
+	const heightScale = 20;
 
 	if (supplies.rescue > 0) {
-		var offset = supplies.rescue * 10;
+		var offset = supplies.rescue * heightScale;
 		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[0] );	
 		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
 							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
@@ -94,7 +102,7 @@ function addBlock(lat, lng, supplies, contact) {
 	}
 
 	if (supplies.food > 0) {
-		var offset = supplies.food * 10;
+		var offset = supplies.food * heightScale;
 		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[1] );	
 		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
 							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
@@ -104,7 +112,7 @@ function addBlock(lat, lng, supplies, contact) {
 	}
 
 	if (supplies.medical > 0) {
-		var offset = supplies.medical * 10;
+		var offset = supplies.medical * heightScale;
 		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[2] );	
 		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
 							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
@@ -114,7 +122,7 @@ function addBlock(lat, lng, supplies, contact) {
 	}
 
 	if (supplies.water > 0) {
-		var offset = supplies.water * 10;
+		var offset = supplies.water * heightScale;
 		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[3] );	
 		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
 							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
@@ -124,6 +132,7 @@ function addBlock(lat, lng, supplies, contact) {
 	}
 
 	if (group.children.length > 0 ) {
+		for(var i = 0; i < group.children.length; i++) console.log(group.children[i].position);
 		console.log(group);
 		screen0.add(group);	
 	}

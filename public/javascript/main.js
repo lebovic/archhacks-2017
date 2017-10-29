@@ -15,10 +15,7 @@ function init() {
     screen3 = new Screen(3, {
         "div" : document.getElementById("sideScreen3")
     });
-    screen4 = new Screen(4, {
-        "div" : document.getElementById("sideScreen4")
-    });
-   
+
 
     texas_diaster_init();
     
@@ -35,16 +32,6 @@ function init() {
     var cube = new THREE.Mesh( geometry, material );
     screen3.add( cube );
 
-    var geometry = new THREE.BoxGeometry( 200, 200, 100 );
-    var material = new THREE.MeshLambertMaterial( {color: 0x00FFFF} );
-    var cube = new THREE.Mesh( geometry, material );
-    var directionalLight1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    var directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    directionalLight2.position.set( 1, 1, 1 );
-    screen4.add( cube );
-    screen4.add( directionalLight1 );
-    screen4.add( directionalLight2 );
-
 
 
     // Start all animates at same time
@@ -52,7 +39,6 @@ function init() {
     screen1.animate();
     screen2.animate();
     screen3.animate();
-    screen4.animate();
 }
 
 function expandClick(index){
@@ -69,7 +55,6 @@ function expandClick(index){
         case 1: screen1.parentDiv.removeChild( screen1.renderer.domElement ); break;
         case 2: screen2.parentDiv.removeChild( screen2.renderer.domElement ); break;
         case 3: screen3.parentDiv.removeChild( screen3.renderer.domElement ); break;
-        case 4: screen4.parentDiv.removeChild( screen4.renderer.domElement ); break;
     }
 
     switch (tSwap) {
@@ -77,49 +62,36 @@ function expandClick(index){
         case 1: screen1.parentDiv.removeChild( screen1.renderer.domElement ); break;
         case 2: screen2.parentDiv.removeChild( screen2.renderer.domElement ); break;
         case 3: screen3.parentDiv.removeChild( screen3.renderer.domElement ); break;
-        case 4: screen4.parentDiv.removeChild( screen4.renderer.domElement ); break;
     }
 
     switch (tMain) {
         case 0: 
             screen0.parentDiv = (tSwap == 1 ? screen1.parentDiv :
                                 (tSwap == 2 ? screen2.parentDiv : 
-                                (tSwap == 3 ? screen3.parentDiv : 
-                                              screen4.parentDiv)));  
+                                              screen3.parentDiv ));  
             screen0.parentDiv.appendChild(screen0.renderer.domElement);
             screen0.onWindowResize();
             break;
         case 1: 
              screen1.parentDiv = (tSwap == 0 ? screen0.parentDiv :
                                  (tSwap == 2 ? screen2.parentDiv :
-                                 (tSwap == 3 ? screen3.parentDiv :
-                                               screen4.parentDiv)));
+                                               screen3.parentDiv ));
              screen1.parentDiv.appendChild(screen1.renderer.domElement)
              screen1.onWindowResize();
             break;
         case 2: 
              screen2.parentDiv = (tSwap == 0 ? screen0.parentDiv :
                                  (tSwap == 1 ? screen1.parentDiv :
-                                 (tSwap == 3 ? screen3.parentDiv :
-                                              screen4.parentDiv)));
+                                               screen3.parentDiv ));
              screen2.parentDiv.appendChild(screen2.renderer.domElement)
              screen2.onWindowResize();
             break;
         case 3: 
              screen3.parentDiv = (tSwap == 0 ? screen0.parentDiv :
                                  (tSwap == 1 ? screen1.parentDiv :
-                                 (tSwap == 2 ? screen2.parentDiv :
-                                               screen4.parentDiv)));
+                                               screen2.parentDiv ));
              screen3.parentDiv.appendChild(screen3.renderer.domElement)
              screen3.onWindowResize();
-            break;
-        case 4: 
-             screen4.parentDiv = (tSwap == 0 ? screen0.parentDiv :
-                                 (tSwap == 1 ? screen1.parentDiv :
-                                 (tSwap == 2 ? screen2.parentDiv :
-                                               screen3.parentDiv)));
-             screen4.parentDiv.appendChild(screen4.renderer.domElement)
-             screen4.onWindowResize();
             break;
     }
 
@@ -139,10 +111,6 @@ function expandClick(index){
         case 3: screen3.parentDiv =  document.getElementById("mainScreen");
                 screen3.parentDiv.appendChild( screen3.renderer.domElement)
                 screen3.onWindowResize();
-                break;
-        case 4: screen4.parentDiv =  document.getElementById("mainScreen");
-                screen4.parentDiv.appendChild( screen4.renderer.domElement)
-                screen4.onWindowResize();
                 break;
     }
 

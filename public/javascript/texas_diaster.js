@@ -33,7 +33,7 @@ function texas_diaster_init() {
 	// create 2d array to hold summation of data
 	resizeTexasDiasterMap();
 
-  new HttpClient().get('http://241fcd3e.ngrok.io/api/resources', function(response) {
+  new HttpClient().get('http://ccea4314.ngrok.io/api/resources', function(response) {
     console.log('Response', response);
     data = JSON.parse(response);
 
@@ -73,6 +73,12 @@ function texas_diaster_init() {
     }
   });
 }
+
+// should add new request
+socket.on('help_request', function(data){
+	console.log('HELP REQUEST RECIEVED', data);
+  addBlock(data.lat, data.lng, data.supplies, data.contact);
+});
 
 /*
 {

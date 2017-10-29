@@ -4,8 +4,10 @@ var router = express.Router();
 
 var Resource = require('../models/Resource');
 var Tweet = require('../models/Tweet');
+var Sentiment = require('../models/Sentiment');
 var findResourceType = require('../utils/resources').findResourceType;
 var getTweets = require('../utils/analyze-tweets').getTweets;
+var getIntensities = require('../utils/analyze-tweets').getIntensities;
 var CONSTANTS = require('../utils/constants');
 
 // @todo: move outta here
@@ -87,15 +89,33 @@ router.get('/api/tweets', async function(req, res, next) {
 
 // Fetch tweets within geographic area with sentiment
 router.post('/api/tweets', async function(req, res, next) {
-	console.log('Numtweets = ', req.body.numTweets)
-	await getTweets(req.body.numTweets);
-
 	Tweet.find((err, doc) => {
 	    if (err)
 	      return next(err);
 
     	res.json(doc);
   	});
+})
+
+router.get('/api/sentiment', function(req, res, next) {
+	Sentiment.find(async (err, doc) => {
+	    if (err)
+	      return next(err);
+
+	  	res.json(doc.map((tweet) => _.pick(tweet, CONSTANTS.SENTIMENT.RETURNABLE_FIELDS)));
+  	}).limit(36);
+})
+
+// Determine tweets within geographic area for sentiment intensity
+router.post('/api/sentiment', async function(req, res, next) {
+	// console.log('Numtweets = ', req.body.numTweets)
+	Tweet.find(async (err, doc) => {
+	    if (err)
+	      return next(err);
+
+	  	await getIntensities(doc)
+    	res.send(201);
+  	}).limit(1000);
 })
 
 // Parse incoming texts (incomplete), and respond with blank TwiML to not respond

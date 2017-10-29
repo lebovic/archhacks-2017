@@ -9,10 +9,16 @@ RESOURCE = {
 
 TWEET = {
 	RETURNABLE_FIELDS: [
-		'name',
 		'lat',
 		'lng',
-		'region',
+		'sentiment',
+	]
+}
+
+SENTIMENT = {
+	RETURNABLE_FIELDS: [
+		'lat',
+		'lng',
 		'sentiment',
 	]
 }
@@ -20,4 +26,5 @@ TWEET = {
 module.exports = {
 	RESOURCE,
 	TWEET,
+	SENTIMENT,
 }

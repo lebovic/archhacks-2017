@@ -17,6 +17,16 @@
     
     <body onload="init()">
     	<div id="mainScreen">
+			<div id="currentInfo">
+				<span id="year1950" class="year">1995</span>
+				<span id="year2000" class="year">2000</span>
+				<span id="year2005" class="year">2005</span>
+			</div>
+
+			<div id="title">
+				World Population
+	 		</div>
+
     		<img class="expandImg" src="textures/expand.png" onclick="expandClick(0)">
     	</div>
 
@@ -34,6 +44,7 @@
 
  		<!-- <script src="/socket.io/socket.io.js"></script> -->
     	<script src="library/three.min.js"></script>
+    	<script src="library/tween.js"></script>
     	<script src="library/jquery-3.2.1.min.js"></script>
     	<script src="library/OrbitControls.js"></script>
 

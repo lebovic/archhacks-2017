@@ -26,6 +26,8 @@ Screen.prototype.initialize = function(id, options){
 	this.parentDiv = options.div;
 	this.parentDiv.renderId = id;
 
+	this.animateMesh = [];
+
 	this.camera = new THREE.PerspectiveCamera( 55, this.parentDiv.clientWidth / this.parentDiv.clientHeight, 1, 2000 );
 	this.camera.position.z = (options.cameraZ || 500);
 	this.renderer =  new THREE.WebGLRenderer();
@@ -87,6 +89,12 @@ Screen.prototype.animate1 = function() {
 
 Screen.prototype.animate2 = function() {    
 	this.animationFrame = requestAnimationFrame( this.animate2 );
+
+	for(var i = 0; i < this.animateMesh.length; i++) {
+		this.animateMesh[i].rotation.y += 0.015;
+		this.animateMesh[i].material.alphaMap.offset.y += .0015;
+	}
+
 	this.controls.update();
 	this.render();
 };
@@ -108,9 +116,13 @@ Screen.prototype.render = function() {
 	this.renderer.render( this.scene, this.camera );
 }
 
-Screen.prototype.add = function(mesh){
-  this.scene.add(mesh);
+Screen.prototype.add = function(mesh) {
+  	this.scene.add(mesh);
 };
+
+Screen.prototype.remove = function(name) {
+	this.scene.remove(this.scene.getChildByName(name));
+}
 
 /**
  * Helper method to convert for LatLng to vertex.

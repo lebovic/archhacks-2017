@@ -15,9 +15,9 @@ function init() {
     screen3 = new Screen(3, {
         "div" : document.getElementById("sideScreen3")
     });
-    screen4 = new Screen(4, {
-        "div" : document.getElementById("sideScreen4")
-    });
+    // screen4 = new Screen(4, {
+    //     "div" : document.getElementById("sideScreen4")
+    // });
    
 
     texas_diaster_init();
@@ -35,16 +35,6 @@ function init() {
     var cube = new THREE.Mesh( geometry, material );
     screen3.add( cube );
 
-    var geometry = new THREE.BoxGeometry( 200, 200, 100 );
-    var material = new THREE.MeshLambertMaterial( {color: 0x00FFFF} );
-    var cube = new THREE.Mesh( geometry, material );
-    var directionalLight1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    var directionalLight2 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    directionalLight2.position.set( 1, 1, 1 );
-    screen4.add( cube );
-    screen4.add( directionalLight1 );
-    screen4.add( directionalLight2 );
-
 
 
     // Start all animates at same time
@@ -52,7 +42,7 @@ function init() {
     screen1.animate();
     screen2.animate();
     screen3.animate();
-    screen4.animate();
+    //screen4.animate();
 }
 
 function expandClick(index){

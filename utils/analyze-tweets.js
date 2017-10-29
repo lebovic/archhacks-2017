@@ -1,9 +1,11 @@
+var _ = require('lodash');
 var mongoose = require('mongoose');
 var Twit = require('twit');
 Promise = require('bluebird');
 
 var sentiment = require('../utils/sentiment');
 var Tweet = require('../models/Tweet');
+var Sentiment = require('../models/Sentiment');
 
 // mongoose.Promise = Promise;
 
@@ -52,29 +54,104 @@ async function getTweets(count) {
 	}
 	console.log("Relevant:", relevantTweets.length);
 
-	saveTweets(relevantTweets);
+	filterAndSave(relevantTweets);
 }
 
-function saveTweets(relevantTweets) {
-	// Add tweets to db
+async function getIntensities(relevantTweets) {
+
+	var sentimentSum = 0;
+	var formattedTweets = relevantTweets;
 	for (var i = 0; i < relevantTweets.length; i++) {
-		const newTweet = {
-			name: relevantTweets[i].user.name,
-			lat: relevantTweets[i].geo.coordinates[0],
-			lng: relevantTweets[i].geo.coordinates[1],
-			region: relevantTweets[i].place.name,
-			sentiment: sentiment.value(relevantTweets[i].text),
-		};
+		sentimentSum += sentiment.value(relevantTweets[i].text);
+	}
 
-		Tweet.create(newTweet, function(err, doc) {
-    		if (err)
-      			return next(err);
+	// Find mean for extremes
+	var meanSentiment = sentimentSum / relevantTweets.length;
+	console.log('Mean sentiment', meanSentiment);
 
-			console.log("New tweet added");
-  		});
+	formattedTweets = formattedTweets.sort((t1, t2) => t1.lng - t2.lng || t1.lat - t2.lat);
+	preIntensities = [[],[],[],[],[],[]];
+	intensities = [[],[],[],[],[],[]];
+	var virtualLength = formattedTweets.length / 6;
+
+	// Because mental math is hard
+	for (var i = 0; i < formattedTweets.length; i++) {
+		var index = Math.floor(i / virtualLength);
+		preIntensities[index].push(formattedTweets[i]);
+	}
+
+	console.log('intensities', preIntensities);
+
+	// Get 36 intensities
+	var minIntensity = 100;
+	var maxIntensity = -100;
+	for (var i = 0; i < preIntensities.length; i++) {
+		var intensity = meanSentiment;
+		for (var j = 0; j < preIntensities[i].length; j++) {
+			console.log("Intensity in", preIntensities[i][j]);
+			if (j === 0) {
+				intensity = preIntensities[i][j].sentiment;
+				location = {lat: preIntensities[i][j].lat, lng: preIntensities[i][j].lng};
+			} else {
+				if (Math.abs(meanSentiment - intensity) > Math.abs(meanSentiment - preIntensities[i][j].sentiment)) {
+					intensity = (0.8 * intensity) + (0.2 * preIntensities[i][j].sentiment);
+					location = {
+						lat: (0.8 * location.lat) + (0.2 * preIntensities[i][j].lat),
+						lng: (0.8 * location.lng) + (0.2 * preIntensities[i][j].lng),
+					}
+				} else {
+					intensity = (0.2 * intensity) + (0.8 * preIntensities[i][j].sentiment);
+					location = {
+						lat: (0.2 * location.lat) + (0.8 * preIntensities[i][j].lat),
+						lng: (0.2 * location.lng) + (0.8 * preIntensities[i][j].lng),
+					}
+				}
+			}
+
+			if ((j + 1) % 6 === 0) {
+				if (intensities[i].length < 6) {
+					intensities[i].push({intensity, location});
+				}
+
+				if (intensity < minIntensity) {
+					minIntensity = intensity;
+				}
+				if (intensity > maxIntensity) {
+					maxIntensity = intensity;
+				}
+
+				intensity = meanSentiment; 
+			}
+		}
+	}
+
+	console.log('down intensities', intensities);
+
+	var range = maxIntensity - minIntensity;
+
+	console.log('Makes it down here');
+
+	// Normalize and save tweet intensities to database
+	for (var i = 0; i < intensities.length; i++) {
+		for (var j = 0; j < intensities[i].length; j++) {
+			console.log('Final lat? ', intensities[i][j]);
+			newTweetIntensity = {
+				lat: intensities[i][j].location.lat,
+				lng: intensities[i][j].location.lng,
+				sentiment: 2*((intensities[i][j].intensity - minIntensity) / (maxIntensity - minIntensity)) - 1,
+			}
+
+			Sentiment.create(newTweetIntensity, function(err, doc) {
+    			if (err)
+      				return next(err);
+
+				console.log("New tweet intensity added");
+  			});
+		}
 	}
 }
 
 module.exports = {
 	getTweets,
+	getIntensities,
 }

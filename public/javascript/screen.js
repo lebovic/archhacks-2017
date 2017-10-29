@@ -107,6 +107,7 @@ Screen.prototype.animate3 = function() {
 
 Screen.prototype.animate4 = function() {    
 	this.animationFrame = requestAnimationFrame( this.animate4 );
+
 	this.controls.update();
 	this.render();
 };

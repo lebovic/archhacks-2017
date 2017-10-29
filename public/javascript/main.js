@@ -27,11 +27,7 @@ function init() {
 
     california_eq_init();
 
-    var geometry = new THREE.BoxGeometry( 200, 200, 200 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xFF0000} );
-    var cube = new THREE.Mesh( geometry, material );
-    screen3.add( cube );
-
+    globe_init();
 
 
     // Start all animates at same time

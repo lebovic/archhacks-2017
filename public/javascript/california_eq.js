@@ -59,6 +59,11 @@ function eqRowSequence() {
 	}
 }
 
+// maeks green triangle
+socket.on('earthquake', function(data){
+    addEarthQuake(-145, -50, 20, true);
+});
+
 function addEarthQuake(x, y, size, special) {
 	var size = size || 5;
 	// prevents random values from always being in upper left

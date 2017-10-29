@@ -13,19 +13,6 @@ var googleMapsClient = require('@google/maps').createClient({
   key: 'AIzaSyD9bf4xCrXd51XAtG_w-viZJSKbSPcW-dM'
 });
 
-
-// Use with @testdata
-// const testData = [
-// 	{"supplies": ["water"], "lat": 18.391606, "lng": -66.08923, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.396776, "lng": -66.099075, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.173806, "lng": -65.792134, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.109212, "lng": -66.094258, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.279797, "lng": -66.331837, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 17.995954, "lng": -67.150318, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.094379, "lng": -67.179844, "contact": 12345754269},
-// 	{"supplies": ["water"], "lat": 18.222427, "lng": -66.971790, "contact": 12345754269},
-// ]
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -41,22 +28,50 @@ router.get('/api/resources', (req, res, next) => {
   });
 });
 
-// Use with @testdata
-// router.get('/api/resources',function(req,res,next){
-//   res.send(testData);
-// });
-
 router.post('/api/resources', function(req, res, next) {
-  console.dir(req.body);
-  Resource.create(req.body, function(err, doc) {
-    if (err)
-      return next(err);
+  // console.dir(req.body);
+  // top left: 29.906365, -95.5233427
+  // top right: 29.906365, -95.1832977
+  // bottom left: 29.620715, -95.5233427
+  // bottom right: 29.620715, -95.1832977
+  var supplies = ["food"];
 
-  	console.dir(doc);
-    res.json({
+  for (var lng = -95.3233427 + (Math.random() / 15); lng < -95.2732977; lng += ((0.340045 / 50) + (Math.random() / 10))) {
+  	for (var lat = 29.786365 + (Math.random() / 15); lat > 29.760715; lat -= ((0.28565 / 50) + (Math.random() / 10))) {
+  		if (Math.random() < 0.2) {
+  			supplies = ["water", "food"];
+  		} else if (Math.random() < 0.4) {
+  			supplies = ["rescue"];
+  		} else if (Math.random() < 0.6) {
+  			supplies = ["medical", "rescue"]
+  		} else if (Math.random() < 0.8) {
+  			supplies = ["food", "medical"];
+  		} else {
+  			supplies = ["food", "water", "medical", "rescue"];
+  		}
+
+  		newResource = {
+  			"contact": 18476518454,
+  			lat,
+  			lng,
+  			supplies,
+  		}
+  		console.dir('Creating new resource', newResource);
+  		Resource.create(newResource, function(err, doc) {
+		    if (err)
+		      return next(err);
+  		});
+  	}
+  }
+
+  // for (var i = 0; i < req.body.length; i++) {
+  // 	Resource.create(req.body, function(err, doc) {
+	 //    if (err)
+	 //      return next(err);
+  // 	});
+  // }
+  res.json({
       success: true,
-      resource: doc
-    });
   });
 });
 

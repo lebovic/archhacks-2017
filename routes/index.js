@@ -1,9 +1,6 @@
 var _ = require('lodash');
 var express = require('express');
 var router = express.Router();
-var app = express();
-var server = require('http').createServer(app); //creates an HTTP server instance
-var io = require('socket.io')(server);
 
 var Resource = require('../models/Resource');
 var Tweet = require('../models/Tweet');
@@ -165,7 +162,7 @@ router.post('/api/texts', function(req, res, next) {
 		      	return next(err);
 
 		  		console.dir(doc);
-		  		io.emit('help_request', newResource);
+		  		 global.io.emit('help_request', newResource);
 		  		res.send("<Response><Message>Received! " + formattedResponse + "</Message></Response>")
 		  	});
 		  	// res.send("<Response><Message>Adding resources via text temporarily disabled.</Message></Response>")

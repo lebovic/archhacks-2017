@@ -28,10 +28,7 @@ function init() {
     var meshEarth = new THREE.Mesh( geometryEarth, materialEarth );
     screen1.add( meshEarth );
 
-    var geometry = new THREE.BoxGeometry( 200, 100, 100 );
-    var material = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
-    var cube = new THREE.Mesh( geometry, material );
-    screen2.add( cube );
+    california_eq_init();
 
     var geometry = new THREE.BoxGeometry( 200, 200, 200 );
     var material = new THREE.MeshBasicMaterial( {color: 0xFF0000} );

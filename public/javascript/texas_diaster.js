@@ -33,7 +33,7 @@ function texas_diaster_init() {
 	// create 2d array to hold summation of data
 	resizeTexasDiasterMap();
 
-  new HttpClient().get('http://ccea4314.ngrok.io/api/resources', function(response) {
+  new HttpClient().get('http://54b77131.ngrok.io/api/resources', function(response) {
     console.log('Response', response);
     data = JSON.parse(response);
 

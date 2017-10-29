@@ -74,34 +74,12 @@ dragonServer.on('listening', function () {
     var address = dragonServer.address();
     console.log('UDP Server listening on ' + address.address + ":" + address.port);
 });
-
+var t = 0;
 dragonServer.on('message', function (message, remote) {
 
    var trimStr = message.toString().trim();
 
-   if (trimStr[0] == '0') {
-    // swtich colors
-    var isOn = parseInt(trimStr.substring(2,trimStr.length));
-    if (isOn) {
-      // only send socket when turned on
-      io.emit('nextColor',{});
-    }
-
-   } else if (trimStr[0] == '1') {
-    // light change
-    // console.log(trimStr.substring(2,trimStr.length));
-    var lightLevel = parseFloat(trimStr.substring(2,trimStr.length)) * 2.5;
-
-    // console.log("----" + lightLevel);
-    lightLevel = Math.max(0, lightLevel);
-    lightLevel = Math.min(100, lightLevel);
-    lightLevel = Math.floor(lightLevel);
-
- console.log("Light Level: [" + lightLevel + " of 100]");
-
-    io.emit('lightLevel',{"level": lightLevel});
-   }
-
+   console.log(t++, trimStr);
 });
 
 dragonServer.bind(PORT, HOST);

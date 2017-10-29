@@ -10,6 +10,8 @@ var texas_diaster_grid; // actual 2d array
 var texas_diaster_grid_size = 64;
 var texas_diaster_grid_h = 600;
 var texas_diaster_grid_w = 500;
+var texas_diaster_block_w = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
+var texas_diaster_block_h = Math.floor(Math.min(texas_diaster_grid_h, texas_diaster_grid_w) / texas_diaster_grid_size) - 1;
 var texas_diaster_normalize_h = TEXAS_DIASTER_DATA.CORNER.lat - TEXAS_DIASTER_DATA.ORIGIN.lat;
 var texas_diaster_normalize_w = TEXAS_DIASTER_DATA.CORNER.lng - TEXAS_DIASTER_DATA.ORIGIN.lng;
 var texas_diaster_box_geo;
@@ -47,30 +49,25 @@ function texas_diaster_init() {
 			var x,y;
 			
 			// This is the logic to normalize all the data and group it up
-			// for(var i = 0; i < data.length; i++) {
-			for(var i = 0; i < 2; i++) {
+			for(var i = 0; i < data.length; i++) {
 				// ya, my b on this equation!			
 				x = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lng - TEXAS_DIASTER_DATA.ORIGIN.lng) / texas_diaster_normalize_w)));
 				y = Math.abs(parseInt(texas_diaster_grid_size * ((data[i].lat - TEXAS_DIASTER_DATA.ORIGIN.lat) / texas_diaster_normalize_h)));
 				
-				console.log("x", x);
-				console.log("y", y);
-				console.log("data", data[i]);
-				console.log(data[i].supplies.indexOf("food"));
 				if (data[i].supplies.indexOf("rescue") >= 0) {
 					texas_diaster_grid[x][y].rescue++;
-				} else if (data[i].supplies.indexOf("food") >= 0) {
-					texas_diaster_grid[x][y].food++;
-					console.log("FFFFFOOOOOD");
-					console.log(texas_diaster_grid[x][y]);
-				} else if (data[i].supplies.indexOf("medical") >= 0) {
-					texas_diaster_grid[x][y].medical++;
-				} else if (data[i].supplies.indexOf("water") >= 0) {
-					texas_diaster_grid[x][y].water++;
 				}
-				
+				if (data[i].supplies.indexOf("food") >= 0) {
+					texas_diaster_grid[x][y].food++;
+				} 
+				if (data[i].supplies.indexOf("medical") >= 0) {
+					texas_diaster_grid[x][y].medical++;
+				} 
+				if (data[i].supplies.indexOf("water") >= 0) {
+					texas_diaster_grid[x][y].water++;
+				}				
 			}
-			console.log(texas_diaster_grid);
+
 			for (i = 0; i < texas_diaster_grid_size; i++) {
 				for (j = 0; j < texas_diaster_grid_size; j++) {
 			  		addBlock(j, i, texas_diaster_grid[i][j], "16513354751");
@@ -95,63 +92,51 @@ function addBlock(lat, lng, supplies, contact) {
 	var group = new THREE.Group();
 	var heightOffset = 0;
 
-	var blockW = 5;
-	var blockH = 5;
-
-	if (lat == 23 && lng == 55) {debugger;}
 
 	if (supplies.rescue > 0) {
-		block = new THREE.Mesh( new THREE.BoxGeometry( blockW, blockH, supplies.rescue * 10), texas_diaster_box_mat[0] );	
-		block.position.set( lng, lat, heightOffset );
+		var offset = supplies.rescue * 10;
+		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[0] );	
+		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
+							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
+							heightOffset + ( offset / 2 ) );
 		group.add( block );
-		heightOffset += supplies.rescue * 10;	
+		heightOffset += offset;	
 	}
 
 	if (supplies.food > 0) {
-		block = new THREE.Mesh( new THREE.BoxGeometry( blockW, blockH, supplies.food * 10), texas_diaster_box_mat[0] );	
-		block.position.set( lng, lat, heightOffset );
+		var offset = supplies.food * 10;
+		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[1] );	
+		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
+							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
+							heightOffset + ( offset / 2 ) );
 		group.add( block );
-		heightOffset += supplies.food * 10;		
+		heightOffset += offset;	
 	}
 
 	if (supplies.medical > 0) {
-		block = new THREE.Mesh( new THREE.BoxGeometry( blockW, blockH, supplies.medical * 10), texas_diaster_box_mat[0] );		
-		block.position.set( lng, lat, heightOffset );
+		var offset = supplies.medical * 10;
+		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[2] );	
+		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
+							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
+							heightOffset + ( offset / 2 ) );
 		group.add( block );
-		heightOffset += supplies.medical * 10;	
+		heightOffset += offset;	
 	}
 
 	if (supplies.water > 0) {
-		block = new THREE.Mesh( new THREE.BoxGeometry( blockW, blockH, supplies.water * 10), texas_diaster_box_mat[0] );		
-		block.position.set( lng, lat, heightOffset );
+		var offset = supplies.water * 10;
+		block = new THREE.Mesh( new THREE.BoxGeometry( texas_diaster_block_w, texas_diaster_block_h, offset), texas_diaster_box_mat[3] );	
+		block.position.set( texas_diaster_grid_w * (lng/texas_diaster_grid_size) - (texas_diaster_grid_w/2),
+							texas_diaster_grid_h * (lat/texas_diaster_grid_size) - (texas_diaster_grid_h/2),
+							heightOffset + ( offset / 2 ) );
 		group.add( block );
-		heightOffset += supplies.water * 10;	
+		heightOffset += offset;		
 	}
 
-	// for (var i = 0; i < supplies.length; i++) {
-	// 	var block;
-	// 	switch(supplies[i].type) {
-	// 		case TEXAS_DIASTER_DATA.SUPPLIES[0]: // rescue
-	// 			block = new THREE.Mesh( new THREE.BoxGeometry( 5, supplies[i].count * 10, 5), texas_diaster_box_mat[0] );				
-	// 			break;
-	// 		case TEXAS_DIASTER_DATA.SUPPLIES[1]: // food
-	// 			block = new THREE.Mesh(  new THREE.BoxGeometry( 5, supplies[i].count * 10, 5), texas_diaster_box_mat[1] );
-	// 			break;
-	// 		case TEXAS_DIASTER_DATA.SUPPLIES[2]: // medical
-	// 			block = new THREE.Mesh(  new THREE.BoxGeometry( 5, supplies[i].count * 10, 5), texas_diaster_box_mat[2] );
-	// 			break;
-	// 		case TEXAS_DIASTER_DATA.SUPPLIES[3]: // water
-	// 			block = new THREE.Mesh(  new THREE.BoxGeometry( 5, supplies[i].count * 10, 5), texas_diaster_box_mat[3] );
-	// 			break;
-	// 	}
-
-	// 	heightOffset += supplies[i].count;
-
-	// 	block.position.set( lng, lat, heightOffset );
-	// 	group.add( block )
-	// }
-
-	screen0.add(group);	
+	if (group.children.length > 0 ) {
+		console.log(group);
+		screen0.add(group);	
+	}
 }
 
 function resizeTexasDiasterMap() {

@@ -18,13 +18,9 @@ function init() {
 
 
     texas_diaster_init();
-    
-    var textureEarth = new THREE.TextureLoader().load( '../textures/earth.jpg' );
-    var geometryEarth = new THREE.SphereGeometry( 200, 128, 128 );
-    var materialEarth = new THREE.MeshBasicMaterial( { map: textureEarth } );
-    var meshEarth = new THREE.Mesh( geometryEarth, materialEarth );
-    screen1.add( meshEarth );
 
+    texas_tweet_init();
+    
     california_eq_init();
 
     globe_init();

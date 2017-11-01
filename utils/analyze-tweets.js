@@ -10,10 +10,10 @@ var Sentiment = require('../models/Sentiment');
 // mongoose.Promise = Promise;
 
 var twitter = new Twit({
-	consumer_key: '***REMOVED***',
- 	consumer_secret: '***REMOVED***',
-	access_token: '***REMOVED***',
- 	access_token_secret: '***REMOVED***',
+	consumer_key: 'REPLACE_WITH_KEY',
+ 	consumer_secret: 'REPLACE_WITH_KEY',
+	access_token: 'REPLACE_WITH_KEY',
+ 	access_token_secret: 'REPLACE_WITH_KEY',
  	timeout_ms: 60*1000,
 })
 

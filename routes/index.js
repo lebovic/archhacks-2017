@@ -12,7 +12,7 @@ var CONSTANTS = require('../utils/constants');
 
 // @todo: move outta here
 var googleMapsClient = require('@google/maps').createClient({
-  key: '***REMOVED***'
+  key: 'REPLACE_WITH_KEY'
 });
 
 /* GET home page. */

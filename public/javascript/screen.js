@@ -76,6 +76,33 @@ Screen.prototype.animate0 = function() {
 	// this.globe.rotation.x += 0.001;
 	// this.globe.rotation.y += 0.008;
 
+	raycaster.setFromCamera( mouse, this.camera );
+	var intersects = raycaster.intersectObjects( this.scene.children );
+	if ( intersects.length > 0 ) {
+		if ( INTERSECTED != intersects[ 0 ].object ) {
+			if ( INTERSECTED ) //INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+			INTERSECTED = intersects[ 0 ].object;
+			//	INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+			//INTERSECTED.material.emissive.setHex( 0xff0000 );
+			context1.clearRect(0,0,640,480);
+				var message = "Contact Info: 165-133-54751";	
+				var metrics = context1.measureText(message);
+				var width = metrics.width;
+				context1.fillStyle = "rgba(0,0,0,0.95)"; // black border
+				context1.fillRect( 0,0, width+8,20+8);
+				context1.fillStyle = "rgba(255,255,255,0.95)"; // white filler
+				context1.fillRect( 2,2, width+4,20+4 );
+				context1.fillStyle = "rgba(0,0,0,1)"; // text color
+				context1.fillText( message, 4,20 );
+				texture1.needsUpdate = true;
+		}
+	} else {
+		if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+		INTERSECTED = null;		
+		context1.clearRect(0,0,300,300);
+		texture1.needsUpdate = true;
+	}
+
 	this.controls.update();
 
 	this.render();

@@ -16,9 +16,26 @@ var texas_diaster_normalize_h = TEXAS_DIASTER_DATA.CORNER.lat - TEXAS_DIASTER_DA
 var texas_diaster_normalize_w = TEXAS_DIASTER_DATA.CORNER.lng - TEXAS_DIASTER_DATA.ORIGIN.lng;
 var texas_diaster_box_geo;
 var texas_diaster_box_mat = [];
-
-
+var context1;
+var canvas1;
 function texas_diaster_init() {
+	canvas1 = document.createElement('canvas');
+	context1 = canvas1.getContext('2d');
+	context1.font = "Bold 20px Arial";
+	context1.fillStyle = "rgba(0,0,0,0.95)";
+
+	// canvas contents will be used for a texture
+	texture1 = new THREE.Texture(canvas1) 
+	texture1.needsUpdate = true;
+
+	var spriteMaterial = new THREE.SpriteMaterial( { map: texture1} );
+
+	sprite1 = new THREE.Sprite( spriteMaterial );
+	sprite1.scale.set(200,100,1.0);
+	sprite1.position.set( 50, 50, 0 );
+	screen0.add( sprite1 );	
+
+
 	var texture = new THREE.TextureLoader().load( '../textures/texas_diaster_start.png' );
 	var geometry = new THREE.PlaneGeometry( texas_diaster_grid_w, texas_diaster_grid_h );
 	var material = new THREE.MeshBasicMaterial( { map: texture, side: THREE.FrontSide } );
@@ -30,13 +47,14 @@ function texas_diaster_init() {
 	texas_diaster_box_mat[2]  = new THREE.MeshBasicMaterial( {color: 0xFF0000} ); // medical - red
 	texas_diaster_box_mat[3]  = new THREE.MeshBasicMaterial( {color: 0x0000FF} ); // water - blue
 
+	raycaster = new THREE.Raycaster();
 	// create 2d array to hold summation of data
 	resizeTexasDiasterMap();
 
-  new HttpClient().get('http://ccea4314.ngrok.io/api/resources', function(response) {
-    console.log('Response', response);
-    data = JSON.parse(response);
-
+ // new HttpClient().get('http://ccea4314.ngrok.io/api/resources', function(response) {
+ //   console.log('Response', response);
+//    data = JSON.parse(response);
+    data = [{"supplies":["food","water"],"lat":29.7361352,"lng":-95.34327030000001,"contact":18476518454},{"supplies":["food","water"],"lat":29.7361352,"lng":-95.34327030000001,"contact":18476518454},{"supplies":["food","medical","rescue"],"lat":29.7429276,"lng":-95.3706247,"contact":16513354751},{"supplies":["food","water"],"lat":29.7492286,"lng":-95.3845977,"contact":16513354751},{"supplies":["medical","rescue"],"lat":29.7988129,"lng":-95.3107455,"contact":16513354751},{"supplies":["food","water"],"lat":29.6343504,"lng":-95.3422324,"contact":16513354751},{"supplies":["rescue"],"lat":29.6328914,"lng":-95.214253,"contact":16513354751},{"supplies":["food","medical"],"lat":29.7428491,"lng":-95.2638144,"contact":16513354751},{"supplies":["water","rescue"],"lat":29.74880649999999,"lng":-95.6104287,"contact":16513354751},{"supplies":["medical"],"lat":29.7910839,"lng":-95.5773172,"contact":16513354751},{"supplies":["rescue"],"lat":29.842126,"lng":-95.46169700000002,"contact":16513354751},{"supplies":["water","rescue"],"lat":29.8639322,"lng":-95.4204573,"contact":16513354751},{"supplies":["medical","rescue"],"lat":29.6722799,"lng":-95.3060788,"contact":16513354751},{"supplies":["food","water","rescue"],"lat":29.6720417,"lng":-95.578096,"contact":16513354751},{"supplies":["food","water"],"lat":29.6598426,"lng":-95.5771139,"contact":16513354751}];
     var x, y;
 
     // This is the logic to normalize all the data and group it up
@@ -71,7 +89,7 @@ function texas_diaster_init() {
         addBlock(j, i, texas_diaster_grid[i][j], "16513354751");
       }
     }
-  });
+//  });
 }
 
 // should add new request
@@ -138,8 +156,7 @@ function addBlock(lat, lng, supplies, contact) {
 	}
 
 	if (group.children.length > 0 ) {
-		for(var i = 0; i < group.children.length; i++) console.log(group.children[i].position);
-		console.log(group);
+		for(var i = 0; i < group.children.length; i++)
 		screen0.add(group);	
 	}
 }

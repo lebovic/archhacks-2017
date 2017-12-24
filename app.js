@@ -17,7 +17,7 @@ global.io = io;
 var dgram = require('dgram');
 var ip = require('ip');
 
-var index = require('./routes/index')(app.io);
+var index = require('./routes/index');
 var users = require('./routes/users');
 // var api = require('./routes/api');
 var config = require('./config/config');
